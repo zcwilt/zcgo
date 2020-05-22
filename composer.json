@@ -1,0 +1,21 @@
+{
+    "name": "zcwilt/zcgo",
+    "type": "project",
+    "description": "A command line interface for Zen Cart",
+    "keywords": [
+        "Zen Cart",
+        "command"
+    ],
+    "license": "MIT",
+    "require": {
+        "symfony/console": "^5",
+        "illuminate/database": "~6.0",
+        "illuminate/events": "~6.0"
+    },
+    "bin": ["dist/zcgo"],
+    "autoload": {
+        "psr-4": {
+            "Zencart\\Go\\": "src/"
+        }
+    }
+}
