@@ -1,0 +1,25 @@
+{
+    "name": "zcwilt/zcgo",
+    "type": "project",
+    "description": "A command line interface for Zen Cart",
+    "keywords": [
+        "Zen Cart",
+        "command"
+    ],
+    "license": "MIT",
+    "require": {
+        "symfony/console": "^6",
+        "zcwilt/class-finder": "dev-master"
+    },
+    "bin": ["dist/zcgo"],
+    "autoload": {
+        "psr-4": {
+            "Zcgo\\Commands\\": "src/Commands",
+            "Zcgo\\Lib\\": "src/Lib",
+            "Zcgo\\Exceptions\\": "src/Exceptions",
+            "Zcgo\\Traits\\": "src/Traits"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

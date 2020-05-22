@@ -1,0 +1,46 @@
+#!/usr/bin/env php
+<?php
+/**
+ *
+ * @copyright Copyright 2003-2020 Zen Cart Development Team
+ * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
+ * @version $Id:  $
+ */
+
+$dir = __DIR__ . '/..';
+
+if (!file_exists($dir . '/autoload.php')) {
+    $dir = __DIR__ . '/../vendor';
+}
+if (!file_exists($dir . '/autoload.php')) {
+    $dir = __DIR__ . '/../../..';
+}
+if (!file_exists($dir . '/autoload.php')) {
+    echo 'Autoload not found.';
+    exit(1);
+}
+require $dir . '/autoload.php';
+
+$dir = __DIR__ . '/..';
+if (!file_exists($dir . '/autoload.php')) {
+    $dir = __DIR__ . '/../vendor';
+}
+if (!file_exists($dir . '/autoload.php')) {
+    $dir = __DIR__ . '/../../../..';
+}
+require $dir . '/includes/configure.php';
+
+use Symfony\Component\Console\Application;
+use Zcgo\Lib\CommandLister;
+
+$application = new Application();
+
+$files = CommandLister::list();
+
+foreach ($files as $file) {
+    $command = new ($file);
+    $application->add($command);
+}
+
+$application->run();
+
