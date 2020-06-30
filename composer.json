@@ -15,7 +15,7 @@
     "bin": ["dist/zcgo"],
     "autoload": {
         "psr-4": {
-            "Zencart\\Go\\": "src/"
+            "Zcgo\\Commands\\": "src/Commands"
         }
     }
 }

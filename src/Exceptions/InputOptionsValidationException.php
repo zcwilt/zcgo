@@ -6,7 +6,7 @@
  * @version $Id:  $
  */
 
-namespace Zencart\Go\exceptions;
+namespace Zcgo\Exceptions;
 
 class InputOptionsValidationException extends \Exception
 {

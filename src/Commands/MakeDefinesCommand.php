@@ -6,14 +6,15 @@
  * @version $Id:  $
  */
 
-namespace Zencart\Go;
+namespace Zcgo\Commands;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zencart\Go\exceptions\InputOptionsValidationException;
+use Zcgo\Exceptions\InputOptionsValidationException;
+use Zcgo\FileSystem\FileSystem;
 
 class MakeDefinesCommand extends Command
 {
@@ -38,6 +39,7 @@ class MakeDefinesCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->fs = FileSystem::getInstance();
         $this->input = $input;
         $this->output = $output;
         try {
@@ -136,7 +138,7 @@ class MakeDefinesCommand extends Command
     {
         $this->output->writeln('processing directory ' . $directory);
         // @todo update regex to not look at lang.* files
-        $fileList = $this->listFilesFromDirectory($directory, '~^[^\._].*\.php$~i');
+        $fileList = $this->fs->listFilesFromDirectory($directory, '~^[^\._].*\.php$~i');
         foreach ($fileList as $file) {
             try {
                 $this->processSingleFile($directory . $file);
@@ -296,16 +298,4 @@ class MakeDefinesCommand extends Command
         $this->output->writeln($output);
     }
 
-    public function listFilesFromDirectory($rootDir, $fileRegx)
-    {
-        if (!$dir = @dir($rootDir)) return [];
-        $fileList = [];
-        while ($file = $dir->read()) {
-            if (preg_match($fileRegx, $file) > 0) {
-                $fileList[] = basename($rootDir . '/' . $file);
-            }
-        }
-        $dir->close();
-        return $fileList;
-    }
 }
