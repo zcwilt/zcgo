@@ -15,7 +15,10 @@
     "bin": ["dist/zcgo"],
     "autoload": {
         "psr-4": {
-            "Zcgo\\Commands\\": "src/Commands"
+            "Zcgo\\Commands\\": "src/Commands",
+            "Zcgo\\FileSystem\\": "src/",
+            "Zcgo\\Exceptions\\": "src/Exceptions",
+            "Zcgo\\Traits\\": "src/Traits"
         }
     }
 }
