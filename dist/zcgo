@@ -38,8 +38,8 @@ use Symfony\Component\Console\Application;
 $application = new Application();
 $command = new MakeDefinesCommand();
 $application->add($command);
-$command = new MakeIdeHelperCommand();
-$application->add($command);
+//$command = new MakeIdeHelperCommand();
+//$application->add($command);
 $command = new DumpAdminlogsCommand();
 $application->add($command);
 
