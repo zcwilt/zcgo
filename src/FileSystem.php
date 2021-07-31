@@ -8,7 +8,12 @@ class FileSystem
 {
     use Singleton;
 
-    public function listFilesFromDirectory($rootDir, $fileRegx)
+    /**
+     * @param string $rootDir
+     * @param string $fileRegx
+     * @return array
+     */
+    public function listFilesFromDirectory(string $rootDir, string $fileRegx): array
     {
         if (!$dir = @dir($rootDir)) return [];
         $fileList = [];
@@ -20,5 +25,4 @@ class FileSystem
         $dir->close();
         return $fileList;
     }
-
 }

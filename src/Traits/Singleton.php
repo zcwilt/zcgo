@@ -10,14 +10,32 @@ namespace Zcgo\Traits;
 
 trait Singleton
 {
+    /**
+     * @var array
+     */
     private static $instances = array();
+
+    /**
+     *
+     */
     protected function __construct() {}
+
+    /**
+     *
+     */
     protected function __clone() {}
+
+    /**
+     *
+     */
     public function __wakeup()
     {
         throw new Exception("Cannot unserialize singleton");
     }
 
+    /**
+     * @return mixed|static
+     */
     public static function getInstance()
     {
         $cls = get_called_class(); // late-static-bound class name
