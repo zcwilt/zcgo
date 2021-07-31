@@ -15,12 +15,17 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Illuminate\Database\Capsule\Manager as Capsule;
 
 class DumpAdminLogsCommand extends Command
 {
+    /**
+     * @var string
+     */
     protected static $defaultName = 'clear:adminlogs';
 
+    /**
+     *
+     */
     protected function configure()
     {
         $this
@@ -36,16 +41,45 @@ class DumpAdminLogsCommand extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        try {
+            $dbh = new \PDO(DB_TYPE . ':host=' . DB_SERVER . ';dbname=' . DB_DATABASE, DB_SERVER_USERNAME, DB_SERVER_PASSWORD);
+        } catch (\Exception $e) {
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
+            return Command::FAILURE;
+        }
+        try {
+            $sth = $dbh->prepare('SELECT count(*) as count FROM ' . DB_PREFIX . 'admin_activity_log');
+            $sth->execute();
+            $result = $sth->fetch();
+        } catch (\Exception $e) {
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
+            return Command::FAILURE;
+        }
+        if ((int)$result['count'] === 0) {
+            $output->writeln('<comment>There are no entries in the Activity Log</comment>');
+            return Command::SUCCESS;
+        }
+        $output->writeln('There are currently ' . $result['count'] . ' entries in Admin Activity Log');
         $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion('Are you sure you want to delete all admin log data(y/n)?', false);
-
         if (!$helper->ask($input, $output, $question)) {
             return Command::SUCCESS;
         }
-        $result = Capsule::table('admin_activity_log')->get();
-        print_r($result);
-        return 0;
+        try {
+            $sth = $dbh->prepare('DELETE FROM ' . DB_PREFIX . 'admin_activity_log');
+            $sth->execute();
+        } catch (\Exception $e) {
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
+            return Command::FAILURE;
+        }
+        $output->writeln('<info>All Entries removed</info>');
+        return Command::SUCCESS;
     }
 }
